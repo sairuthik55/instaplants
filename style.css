@@ -875,3 +875,159 @@ body {
     gap: 1.5rem;
   }
 }
+/* ================= MOBILE POLISH (FINAL) ================= */
+@media (max-width: 768px) {
+
+  /* -------- GLOBAL -------- */
+  body {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  section {
+    scroll-margin-top: 70px;
+  }
+
+  /* -------- NAVBAR (APP STYLE) -------- */
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-radius: 0 0 18px 18px;
+  }
+
+  .navbar nav a {
+    padding: 6px 10px;
+    border-radius: 14px;
+  }
+
+  /* -------- HERO -------- */
+  .hero {
+    height: 55vh;
+    border-radius: 0 0 30px 30px;
+  }
+
+  .hero-content h1 {
+    font-size: 1.9rem;
+    letter-spacing: 0.3px;
+  }
+
+  .hero-content p {
+    max-width: 90%;
+    margin: auto;
+    opacity: 0.9;
+  }
+
+  /* -------- CATEGORIES (TOUCH FRIENDLY) -------- */
+  .category-card {
+    width: 120px;
+    height: 120px;
+  }
+
+  .category-wrapper {
+    min-width: 120px;
+  }
+
+  .category-wrapper p {
+    font-size: 0.8rem;
+  }
+
+  /* -------- PRODUCT CARDS (MODERN GRID) -------- */
+  .product-grid {
+    gap: 0.9rem;
+  }
+
+  .product-card {
+    border-radius: 20px;
+  }
+
+  .product-card img {
+    height: 150px;
+  }
+
+  .product-card h3 {
+    font-size: 0.95rem;
+  }
+
+  .product-card p:not(.price) {
+    font-size: 0.78rem;
+  }
+
+  .price {
+    font-size: 1.05rem;
+  }
+
+  .product-card button {
+    width: 100%;
+    margin-top: 6px;
+    border-radius: 22px;
+    font-size: 0.8rem;
+  }
+
+  /* -------- CART (BOTTOM SHEET FEEL) -------- */
+  .cart {
+    padding: 1.2rem;
+  }
+
+  .cart-summary {
+    position: sticky;
+    bottom: 0;
+    border-radius: 20px 20px 0 0;
+    margin-top: 1rem;
+  }
+
+  /* -------- CHECKOUT FORM -------- */
+  .checkout-form {
+    padding: 1.6rem;
+    border-radius: 22px;
+  }
+
+  .checkout-form h3 {
+    font-size: 1rem;
+  }
+
+  .checkout-form input,
+  .checkout-form textarea {
+    border-radius: 14px;
+    font-size: 0.9rem;
+  }
+
+  .checkout-btn {
+    border-radius: 30px;
+    font-size: 0.95rem;
+  }
+
+  /* -------- MODAL (APP LOOK) -------- */
+  .modal-content {
+    border-radius: 22px;
+  }
+
+  .modal-left img {
+    height: 230px;
+  }
+
+  .modal-right h1 {
+    font-size: 1.35rem;
+  }
+
+  .modal-price {
+    font-size: 1.4rem;
+  }
+
+  /* -------- FOOTER -------- */
+  .footer {
+    padding-bottom: 90px; /* space for thumb */
+  }
+
+  /* -------- TOAST CENTERED -------- */
+  .toast {
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, 30px);
+  }
+
+  .toast.show {
+    transform: translate(-50%, 0);
+  }
+}
+
