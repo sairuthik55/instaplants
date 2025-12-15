@@ -997,37 +997,85 @@ body {
     font-size: 0.95rem;
   }
 
-  /* -------- MODAL (APP LOOK) -------- */
-  .modal-content {
-    border-radius: 22px;
+  /* ================= UGAOO-STYLE SPACIOUS MOBILE ================= */
+@media (max-width: 768px) {
+
+  /* PAGE BREATHING SPACE */
+  body {
+    background: #f7faf7;
   }
 
-  .modal-left img {
-    height: 230px;
+  .products {
+    padding: 1.5rem 1rem 3rem;
   }
 
-  .modal-right h1 {
-    font-size: 1.35rem;
+  /* GRID: BIGGER CARDS */
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.4rem; /* 👈 BIG DIFFERENCE */
   }
 
-  .modal-price {
-    font-size: 1.4rem;
+  /* CARD */
+  .product-card {
+    border-radius: 20px;
+    padding-bottom: 1rem;
   }
 
-  /* -------- FOOTER -------- */
+  /* IMAGE */
+  .product-card img {
+    height: 190px;          /* 👈 taller image */
+    border-radius: 20px 20px 0 0;
+  }
+
+  /* CONTENT */
+  .product-card .product-content {
+    padding: 0.9rem 0.9rem 0;
+  }
+
+  .product-card h3 {
+    font-size: 1rem;
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
+  }
+
+  .product-card p:not(.price) {
+    font-size: 0.82rem;
+    line-height: 1.4;
+    margin-bottom: 0.6rem;
+  }
+
+  /* PRICE AREA */
+  .price {
+    display: block;
+    font-size: 1.15rem;
+    margin: 0.4rem 0 0.8rem;
+  }
+
+  /* BUTTON = FULL WIDTH LIKE UGAOO */
+  .product-card button {
+    width: 100%;
+    float: none;
+    margin-top: 0.4rem;
+    padding: 0.65rem;
+    font-size: 0.85rem;
+    border-radius: 14px;
+  }
+
+  /* CATEGORY TAG */
+  .category-label {
+    margin-bottom: 0.3rem;
+    display: inline-block;
+  }
+
+  /* HERO SPACE */
+  .hero {
+    height: 55vh;
+    margin-bottom: 1rem;
+  }
+
+  /* FOOTER GAP (FEELS PREMIUM) */
   .footer {
-    padding-bottom: 90px; /* space for thumb */
-  }
-
-  /* -------- TOAST CENTERED -------- */
-  .toast {
-    left: 50%;
-    right: auto;
-    transform: translate(-50%, 30px);
-  }
-
-  .toast.show {
-    transform: translate(-50%, 0);
+    padding-bottom: 4rem;
   }
 }
 
