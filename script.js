@@ -36,10 +36,11 @@ db.collection("plants").onSnapshot(snapshot => {
           <p>${p.description || "Healthy premium plant"}</p>
           <p class="price">₹${p.price}</p>
 
-          <button onclick="event.stopPropagation();
-            addToCart('${p.name}', ${p.price}, '${p.image}')">
-            Add to Cart
-          </button>
+        <button class="add-btn"
+  onclick="addToCartFromCard(event,'${p.name}',${p.price},'${p.image}')">
+  Add to Cart
+</button>
+
         </div>
       </div>
     `;
@@ -52,22 +53,14 @@ const DELIVERY_CHARGE = 49;
 
 /******************** PAGE CONTROL ********************/
 function hideAll() {
-  document.getElementById("home").style.display = "none";
-  // Since 'about' content is moved to footer, we can keep the element hidden
-  document.getElementById("about")?.classList.add("hidden"); 
+  document.getElementById("home").classList.add("hidden");
   document.getElementById("cart").classList.add("hidden");
   document.getElementById("checkout").classList.add("hidden");
 }
 
 function showHome() {
   hideAll();
-  document.getElementById("home").style.display = "block";
-}
-
-function showAbout() {
-  // This function is still here but points to an empty/hidden section
-  hideAll();
-  document.getElementById("about").classList.remove("hidden");
+  document.getElementById("home").classList.remove("hidden");
 }
 
 function showCart() {
@@ -134,7 +127,6 @@ function renderCart() {
   const totalEl = document.getElementById("total");
 
   list.innerHTML = "";
-  let subtotal = 0;
 
   if (cart.length === 0) {
     empty.style.display = "block";
@@ -145,10 +137,14 @@ function renderCart() {
 
   empty.style.display = "none";
 
+  let subtotal = 0;
+
   cart.forEach((item, index) => {
     subtotal += item.price * item.qty;
 
-    list.innerHTML += `
+    list.insertAdjacentHTML(
+      "beforeend",
+      `
       <div class="cart-item">
         <img src="${item.image}" class="cart-img">
 
@@ -165,7 +161,8 @@ function renderCart() {
 
         <button class="remove-btn" onclick="removeItem(${index})">✕</button>
       </div>
-    `;
+    `
+    );
   });
 
   subtotalEl.innerText = subtotal;
@@ -267,6 +264,13 @@ function showProductDetails(name, price, description, image, category, careTips)
 function hideProductDetails() {
   document.getElementById("productModal").classList.add("hidden");
 }
+function addToCartFromCard(e, name, price, image) {
+  e.stopPropagation(); // FULL STOP
+  addToCart(name, price, image);
+}
+document.addEventListener("DOMContentLoaded", () => {
+  updateCartCount();
+});
 
 /******************** INIT ********************/
 showHome();
