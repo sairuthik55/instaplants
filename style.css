@@ -718,3 +718,160 @@ body {
     max-width: 100%;
   }
 }
+#home,
+#cart,
+#checkout {
+  display: block;
+  width: 100%;
+}
+/* ================= MOBILE FIX ================= */
+@media (max-width: 768px) {
+
+  /* ---------- NAVBAR ---------- */
+  .navbar {
+    padding: 0.8rem 1rem;
+  }
+
+  .navbar nav a {
+    font-size: 0.9rem;
+    margin-left: 0.8rem;
+  }
+
+  /* ---------- HERO SECTION ---------- */
+  .hero {
+    height: 60vh;
+  }
+
+  .hero-content h1 {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+
+  .hero-content p {
+    font-size: 0.95rem;
+    text-align: center;
+    padding: 0 1rem;
+  }
+
+  .hero-content button {
+    padding: 0.6rem 1.4rem;
+    font-size: 0.9rem;
+  }
+
+  /* ---------- CATEGORIES ---------- */
+  .categories {
+    padding: 2rem 1rem;
+  }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    justify-items: center;
+  }
+
+  .category-card {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+  }
+
+  .category-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .category-wrapper p {
+    font-size: 0.85rem;
+    margin-top: 0.4rem;
+    text-align: center;
+  }
+
+  /* ---------- PRODUCTS GRID ---------- */
+  .products {
+    padding: 2rem 1rem;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .product-card {
+    border-radius: 18px;
+    padding-bottom: 0.8rem;
+  }
+
+  .product-card img {
+    height: 160px;
+    border-radius: 18px 18px 0 0;
+  }
+
+  .product-info {
+    padding: 0.7rem;
+  }
+
+  .product-info h3 {
+    font-size: 0.95rem;
+    line-height: 1.2;
+  }
+
+  .product-info p {
+    font-size: 0.8rem;
+  }
+
+  .price {
+    font-size: 1rem;
+    margin: 0.3rem 0;
+  }
+
+  .product-info button {
+    width: 100%;
+    font-size: 0.85rem;
+    padding: 0.45rem;
+    border-radius: 20px;
+  }
+
+  /* ---------- CART ---------- */
+  .cart {
+    padding: 1rem;
+  }
+
+  .cart-item {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .cart-item img {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+  }
+
+  .cart-info h4 {
+    font-size: 0.9rem;
+  }
+
+  /* ---------- MODAL ---------- */
+  .modal-main {
+    flex-direction: column;
+  }
+
+  .modal-left img {
+    height: 220px;
+    border-radius: 16px;
+  }
+
+  .modal-right h1 {
+    font-size: 1.3rem;
+  }
+
+  /* ---------- FOOTER ---------- */
+  .footer {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+}
