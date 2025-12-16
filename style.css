@@ -1200,5 +1200,68 @@ body {
     border-radius: 14px;
   }
 }
+/* ================= SQUARE PRODUCT CARDS (MOBILE) ================= */
+@media (max-width: 768px) {
+
+  /* PRODUCT GRID */
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+  }
+
+  /* CARD */
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  /* SQUARE IMAGE WRAPPER */
+  .product-card img {
+    width: 100%;
+    aspect-ratio: 1 / 1;   /* 🔥 MAKES IT SQUARE */
+    object-fit: cover;
+    height: auto;
+  }
+
+  /* CONTENT BELOW IMAGE */
+  .product-card .product-content {
+    display: flex;
+    flex-direction: column;
+    padding: 0.9rem;
+    flex-grow: 1;
+  }
+
+  /* TITLE LIMIT */
+  .product-card h3 {
+    font-size: 0.95rem;
+    line-height: 1.25;
+    max-height: 2.5em;
+    overflow: hidden;
+  }
+
+  /* DESCRIPTION LIMIT */
+  .product-card p:not(.price) {
+    font-size: 0.8rem;
+    max-height: 2.6em;
+    overflow: hidden;
+  }
+
+  /* PRICE */
+  .price {
+    font-size: 1.05rem;
+    margin: 0.4rem 0;
+  }
+
+  /* BUTTON STAYS AT BOTTOM */
+  .product-card button {
+    margin-top: auto;
+    width: 100%;
+    padding: 0.6rem;
+    border-radius: 14px;
+    font-size: 0.85rem;
+  }
+}
 
 
