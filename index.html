@@ -56,21 +56,21 @@
 
       <div class="category-wrapper" onclick="filterCategory('outdoor')">
         <div class="category-card">
-          <img src="https://images.unsplash.com/photo-1505322409559-0797143f290d">
+          <img src="https://i.postimg.cc/MTDHjw9L/MG0462-Mixed-succulents-202797c.jpg">
         </div>
         <p>Outdoor</p>
       </div>
 
       <div class="category-wrapper" onclick="filterCategory('succulent')">
         <div class="category-card">
-          <img src="https://images.unsplash.com/photo-1510344464871-3375b4f2c0dc">
+          <img src="https://i.postimg.cc/pXyrygzk/hydrangea-macrophylla-56b379.jpg">
         </div>
         <p>Succulent</p>
       </div>
 
       <div class="category-wrapper" onclick="filterCategory('flowering')">
         <div class="category-card">
-          <img src="https://images.unsplash.com/photo-1498305004735-e6f5c80a2b5e">
+          <img src="https://i.postimg.cc/rFdyq52r/Vp4A6bhnqs-Aab-Tz-Mkfp-Dz-Z-1920-80.jpg">
         </div>
         <p>Flowering</p>
       </div>
@@ -144,6 +144,11 @@
         <h1 id="modalName"></h1>
         <p class="modal-price">₹<span id="modalPrice"></span></p>
         <p id="modalDescription"></p>
+<div class="product-card ${p.category?.toLowerCase() || "all"}">
+
+  <div class="delivery-badge">
+    🚚 Same Day Delivery
+  </div>
 
         <button id="modalAddToCartBtn" class="checkout-btn">
           <i class="fas fa-cart-plus"></i> Add to Cart
@@ -179,6 +184,7 @@
 <!-- ================= FIREBASE ================= -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="script.js"></script>
 
 <!-- ================= JS ================= -->
 <script src="script.js"></script>
