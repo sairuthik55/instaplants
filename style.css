@@ -1381,6 +1381,38 @@ body {
   margin-bottom: 1rem;
   color: var(--primary-color);
 }
+/* ================= WELCOME SCREEN ================= */
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.welcome-box {
+  background: white;
+  padding: 2rem 2.5rem;
+  border-radius: 20px;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #1b5e20;
+  box-shadow: 0 15px 40px rgba(0,0,0,.3);
+  animation: fadeScale 0.4s ease;
+}
+
+@keyframes fadeScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 
 .auth-box input {
   width: 100%;
@@ -1434,4 +1466,5 @@ body {
 .logout-btn:hover {
   opacity: 0.9;
 }
+
 
