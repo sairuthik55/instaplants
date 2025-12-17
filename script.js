@@ -58,7 +58,10 @@ function hideAll() {
   document.getElementById("home").classList.add("hidden");
   document.getElementById("cart").classList.add("hidden");
   document.getElementById("checkout").classList.add("hidden");
+  document.getElementById("orders").classList.add("hidden");
+  document.getElementById("auth").classList.add("hidden");
 }
+
 
 function showHome() {
   hideAll();
