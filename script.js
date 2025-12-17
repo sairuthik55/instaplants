@@ -9,6 +9,9 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const auth = firebase.auth();
+let isLogin = true;
+
 /******************** LOAD PLANTS FROM FIREBASE ********************/
 const productGrid = document.getElementById("productGrid");
 
@@ -33,7 +36,6 @@ db.collection("plants").onSnapshot(snapshot => {
         <div class="product-content">
           <span class="category-label">${p.category || "Plant"}</span>
           <h3>${p.name}</h3>
-          <p>${p.description || "Healthy premium plant"}</p>
           <p class="price">₹${p.price}</p>
 
         <button class="add-btn"
@@ -190,42 +192,38 @@ function removeItem(index) {
 async function placeOrder(event) {
   event.preventDefault();
 
-  if (cart.length === 0) {
-    alert("Your cart is empty!");
-    return;
+  try {
+    if (!db) throw new Error("Firestore not initialized");
+    if (cart.length === 0) throw new Error("Cart empty");
+const user = auth.currentUser;
+
+if (!user) throw new Error("Not logged in");
+
+const orderData = {
+  userId: user.uid,
+  email: user.email,
+  items: cart,
+  total: cart.reduce((s, i) => s + i.price * i.qty, 0) + 49,
+  status: "PLACED",
+  createdAt: firebase.firestore.FieldValue.serverTimestamp()
+};
+
+await db.collection("orders").add(orderData);
+
+
+    alert("✅ Order placed successfully");
+
+    cart = [];
+    localStorage.removeItem("cart");
+    updateCartCount();
+    showHome();
+
+  } catch (error) {
+    console.error("🔥 FIREBASE ERROR:", error);
+    alert("❌ " + error.message);
   }
-
-  const orderData = {
-    customer: {
-      name: document.getElementById("name").value,
-      phone: document.getElementById("phone").value,
-      email: document.getElementById("email").value
-    },
-    address: {
-      house: document.getElementById("house").value,
-      street: document.getElementById("street").value,
-      city: document.getElementById("city").value,
-      state: document.getElementById("state").value,
-      pincode: document.getElementById("pincode").value
-    },
-    instructions: document.getElementById("instructions").value,
-    paymentMethod: document.querySelector('input[name="payment"]:checked').value,
-    items: cart,
-    subtotal: cart.reduce((s, i) => s + i.price * i.qty, 0),
-    deliveryCharge: DELIVERY_CHARGE,
-    totalAmount:
-      cart.reduce((s, i) => s + i.price * i.qty, 0) + DELIVERY_CHARGE,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  };
-
-  await db.collection("orders").add(orderData);
-
-  alert("✅ Order placed successfully!");
-
-  cart = []; // CLEAR TEMP CART
-  updateCartCount();
-  showHome();
 }
+
 
 /******************** SCROLL ********************/
 function scrollToProducts() {
@@ -271,6 +269,155 @@ function addToCartFromCard(e, name, price, image) {
 document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
 });
+/******************** MY ORDERS ********************/
+/******************** LOAD MY ORDERS (FULL DETAILS) ********************/
+async function loadMyOrders() {
+  const user = auth.currentUser;
+  const list = document.getElementById("ordersList");
+
+  if (!user) return;
+
+  list.innerHTML = "Loading your orders...";
+
+  try {
+    const snapshot = await db
+      .collection("orders")
+      .where("userId", "==", user.uid)
+      .orderBy("createdAt", "desc")
+      .get();
+
+    if (snapshot.empty) {
+      list.innerHTML = "No orders found";
+      return;
+    }
+
+    list.innerHTML = "";
+
+    snapshot.forEach(doc => {
+      const o = doc.data();
+      const date = o.createdAt
+        ? o.createdAt.toDate().toLocaleString()
+        : "—";
+
+      list.innerHTML += `
+        <div class="order-card">
+
+          <div class="order-top">
+            <div>
+              <strong>Order ID:</strong> ${doc.id}<br>
+              <small>${date}</small>
+            </div>
+
+          <div class="order-items">
+            ${o.items.map(item => `
+              <div class="order-item">
+                <img src="${item.image}">
+                <div class="order-item-info">
+                  <p>${item.name}</p>
+                  <small>₹${item.price} × ${item.qty}</small>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+
+          <div class="order-total">
+            <p>Subtotal: ₹${o.items.reduce((s,i)=>s+i.price*i.qty,0)}</p>
+            <p>Delivery: ₹49</p>
+            <strong>Total: ₹${o.total}</strong>
+          </div>
+
+        </div>
+        <span class="order-status">${o.status}</span>
+          </div>
+      `;
+    });
+
+  } catch (err) {
+    console.error("ORDERS ERROR:", err);
+    list.innerHTML = "Failed to load orders";
+  }
+}
+
+function toggleAuth() {
+  isLogin = !isLogin;
+  document.querySelector(".auth-box h2").innerText =
+    isLogin ? "Sign In" : "Create Account";
+  document.getElementById("authToggle").innerText =
+    isLogin ? "Create new account" : "Already have an account?";
+}
+
+async function authUser(e) {
+  e.preventDefault();
+
+  const email = authEmail.value;
+  const password = authPassword.value;
+
+  try {
+    if (isLogin) {
+      await auth.signInWithEmailAndPassword(email, password);
+    } else {
+      await auth.createUserWithEmailAndPassword(email, password);
+    }
+
+    // Hide auth and show orders
+    document.getElementById("auth").classList.add("hidden");
+    showOrders();
+
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+
+
+
+function logout() {
+  auth.signOut();
+}
+function showOrders() {
+  const user = auth.currentUser;
+
+  // Not logged in → show sign-in ONLY now
+  if (!user) {
+    hideAll();
+    document.getElementById("auth").classList.remove("hidden");
+    return;
+  }
+
+  // Logged in → show orders
+  hideAll();
+  document.getElementById("orders").classList.remove("hidden");
+
+  document.getElementById("orderEmail").innerText =
+    "Logged in as: " + user.email;
+
+  loadMyOrders();
+}
+function showOrders() {
+  const user = auth.currentUser;
+
+  if (!user) {
+    hideAll();
+    document.getElementById("auth").classList.remove("hidden");
+    return;
+  }
+
+  hideAll();
+  document.getElementById("orders").classList.remove("hidden");
+
+  document.getElementById("orderEmail").innerText =
+    "Logged in as: " + user.email;
+
+  loadMyOrders();
+}
+function logout() {
+  auth.signOut().then(() => {
+    hideAll();
+    showHome();   // go back to home after logout
+  });
+}
+
+
 
 /******************** INIT ********************/
 showHome();
