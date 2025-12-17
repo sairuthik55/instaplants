@@ -487,7 +487,7 @@ function logout() {
   });
 }
 function openWhatsAppSupport(orderId) {
-  const phone = "919876543210"; // 🔴 CHANGE TO YOUR SUPPORT NUMBER
+  const phone = "918639533425"; // 🔴 CHANGE TO YOUR SUPPORT NUMBER
   const message = `
 Hello Instaplants 🌿
 I need help with my order.
@@ -499,7 +499,7 @@ Order ID: ${orderId}
   window.open(url, "_blank");
 }
 function openWhatsAppSupport(orderId) {
-  const phone = "919876543210"; // 🔴 CHANGE TO YOUR SUPPORT NUMBER
+  const phone = "918639533425"; // 🔴 CHANGE TO YOUR SUPPORT NUMBER
   const message = `
 Hello Instaplants 🌿
 I need help with my order.
