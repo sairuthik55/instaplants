@@ -195,37 +195,57 @@ function removeItem(index) {
 async function placeOrder(event) {
   event.preventDefault();
 
+  // ✅ CONFIRMATION STEP
+  const confirmOrder = confirm(
+    "🪴 Please confirm your order.\n\nDo you want to place this order now?"
+  );
+
+  if (!confirmOrder) {
+    return; // ❌ User cancelled
+  }
+
   try {
-    if (!db) throw new Error("Firestore not initialized");
+    const user = auth.currentUser;
+    if (!user) throw new Error("Not logged in");
     if (cart.length === 0) throw new Error("Cart empty");
-const user = auth.currentUser;
 
-if (!user) throw new Error("Not logged in");
+    const orderData = {
+      userId: user.uid,
 
-const orderData = {
-  userId: user.uid,
-  email: user.email,
-  items: cart,
-  total: cart.reduce((s, i) => s + i.price * i.qty, 0) + 49,
-  status: "PLACED",
-  createdAt: firebase.firestore.FieldValue.serverTimestamp()
-};
+      customer: {
+        name: document.getElementById("name").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        email: document.getElementById("email").value.trim()
+      },
 
-await db.collection("orders").add(orderData);
+      address: {
+        house: house.value,
+        street: street.value,
+        city: city.value,
+        state: state.value,
+        pincode: pincode.value
+      },
 
+      items: cart,
+      total: cart.reduce((s, i) => s + i.price * i.qty, 0) + 49,
+      status: "pending",
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    await db.collection("orders").add(orderData);
 
     alert("✅ Order placed successfully");
 
     cart = [];
-    localStorage.removeItem("cart");
     updateCartCount();
     showHome();
 
   } catch (error) {
-    console.error("🔥 FIREBASE ERROR:", error);
+    console.error(error);
     alert("❌ " + error.message);
   }
 }
+
 
 
 /******************** SCROLL ********************/
@@ -363,8 +383,9 @@ async function authUser(e) {
     }
 
     // Hide auth and show orders
-    document.getElementById("auth").classList.add("hidden");
-    showOrders();
+ document.getElementById("auth").classList.add("hidden");
+showWelcomeMessage();
+
 
   } catch (err) {
     alert(err.message);
@@ -413,14 +434,48 @@ function showOrders() {
 
   loadMyOrders();
 }
+function showLogin() {
+  hideAll();
+  document.getElementById("auth").classList.remove("hidden");
+}
+
 function logout() {
   auth.signOut().then(() => {
     hideAll();
-    showHome();   // go back to home after logout
+    showThankYouMessage();
   });
 }
 
+auth.onAuthStateChanged(user => {
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
 
+  if (user) {
+    loginBtn.classList.add("hidden");
+    logoutBtn.classList.remove("hidden");
+  } else {
+    loginBtn.classList.remove("hidden");
+    logoutBtn.classList.add("hidden");
+  }
+});
+function showWelcomeMessage() {
+  const overlay = document.getElementById("welcomeOverlay");
+  overlay.classList.remove("hidden");
+
+  setTimeout(() => {
+    overlay.classList.add("hidden");
+    showHome(); // or showOrders()
+  }, 3000);
+}
+function showThankYouMessage() {
+  const overlay = document.getElementById("thankYouOverlay");
+  overlay.classList.remove("hidden");
+
+  setTimeout(() => {
+    overlay.classList.add("hidden");
+    showHome();
+  }, 3000);
+}
 
 /******************** INIT ********************/
 showHome();
