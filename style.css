@@ -1,3 +1,4 @@
+
 /* style.css */
 
 /* BRAND COLOR: Dark Green */
@@ -1263,5 +1264,174 @@ body {
     font-size: 0.85rem;
   }
 }
+/* PLANT DESCRIPTION INSIDE CARD */
+.plant-desc {
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.4;
+  margin: 0.4rem 0 0.8rem;
 
+  /* keeps cards equal height */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;   /* show only 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+@media (max-width: 768px) {
+  .plant-desc {
+    font-size: 0.78rem;
+    line-height: 1.35;
+    -webkit-line-clamp: 2;
+  }
+}
+#modalDescription {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+/* ================= MY ORDERS ================= */
+.orders {
+  padding: 2rem 1rem;
+  max-width: 900px;
+  margin: auto;
+}
+
+.orders-search {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.orders-search input {
+  flex: 1;
+  padding: 0.7rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.orders-search button {
+  padding: 0.7rem 1.2rem;
+  border-radius: 10px;
+  border: none;
+  background: var(--primary-color);
+  color: white;
+  cursor: pointer;
+}
+
+.order-card {
+  background: white;
+  padding: 1.2rem;
+  border-radius: 16px;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,.12);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.order-status {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.order-item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.order-item img {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.order-footer {
+  margin-top: 8px;
+  font-weight: 600;
+}
+/* ================= AUTH ================= */
+.auth {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.2);
+}
+
+.auth-box h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+.auth-box input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+}
+
+.auth-box button {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 25px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  font-size: 1rem;
+}
+
+#authToggle {
+  text-align: center;
+  margin-top: 1rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #388e3c;
+}
+
+.order-email {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+/* LOGOUT BUTTON (MY ORDERS ONLY) */
+.orders-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.logout-btn {
+  background: #c62828;
+  color: white;
+  border: none;
+  padding: 0.45rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  opacity: 0.9;
+}
 
