@@ -22,7 +22,12 @@
   <a onclick="showHome()">Home</a>
   <a onclick="showOrders()">My Orders</a>
   <a onclick="showCart()">🛒 (<span id="cartCount">0</span>)</a>
+
+  <!-- LOGIN / LOGOUT -->
+  <a id="loginBtn" onclick="showLogin()">Login</a>
+  <a id="logoutBtn" class="hidden" onclick="logout()">Logout</a>
 </nav>
+
 
 
 </header>
@@ -65,28 +70,28 @@
 
       <div class="category-wrapper" onclick="filterCategory('indoor')">
         <div class="category-card">
-          <img src="https://images.unsplash.com/photo-1508747703725-719777637510">
+          <img src="https://i.postimg.cc/G2qNfy67/682d17899a57e938d88457b925493e95.jpg">
         </div>
         <p>Indoor</p>
       </div>
 
       <div class="category-wrapper" onclick="filterCategory('outdoor')">
         <div class="category-card">
-          <img src="https://i.postimg.cc/MTDHjw9L/MG0462-Mixed-succulents-202797c.jpg">
+          <img src="https://i.postimg.cc/rFdyq52r/Vp4A6bhnqs-Aab-Tz-Mkfp-Dz-Z-1920-80.jpg">
         </div>
         <p>Outdoor</p>
       </div>
 
       <div class="category-wrapper" onclick="filterCategory('succulent')">
         <div class="category-card">
-          <img src="https://i.postimg.cc/pXyrygzk/hydrangea-macrophylla-56b379.jpg">
+          <img src="https://i.postimg.cc/ZYft7GS0/b22cd671e4fbd39481e3944beb911f16.jpg">
         </div>
         <p>Succulent</p>
       </div>
 
       <div class="category-wrapper" onclick="filterCategory('flowering')">
         <div class="category-card">
-          <img src="https://i.postimg.cc/rFdyq52r/Vp4A6bhnqs-Aab-Tz-Mkfp-Dz-Z-1920-80.jpg">
+          <img src="https://i.postimg.cc/Cxq3Kdfc/6dcaae57a0965e4cc156f79799e629ca.jpg">
         </div>
         <p>Flowering</p>
       </div>
@@ -222,6 +227,19 @@
 
 <!-- ================= TOAST ================= -->
 <div id="toast" class="toast">Item added</div>
+<!-- WELCOME OVERLAY -->
+<div id="welcomeOverlay" class="welcome-overlay hidden">
+  <div class="welcome-box">
+    🌿 Welcome to Instaplants
+  </div>
+</div>
+
+<!-- THANK YOU OVERLAY -->
+<div id="thankYouOverlay" class="welcome-overlay hidden">
+  <div class="welcome-box">
+    🌿 Thank you for visiting Instaplants
+  </div>
+</div>
 
 <!-- ================= FIREBASE ================= -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
