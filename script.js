@@ -323,35 +323,44 @@ async function loadMyOrders() {
         : "—";
 
       list.innerHTML += `
-        <div class="order-card">
+      <div class="order-card">
 
-          <div class="order-top">
-            <div>
-              <strong>Order ID:</strong> ${doc.id}<br>
-              <small>${date}</small>
-            </div>
+  <div class="order-top">
+    <div>
+      <strong>Order ID:</strong> ${doc.id}<br>
+      <small>${date}</small>
+    </div>
+  </div>
 
-          <div class="order-items">
-            ${o.items.map(item => `
-              <div class="order-item">
-                <img src="${item.image}">
-                <div class="order-item-info">
-                  <p>${item.name}</p>
-                  <small>₹${item.price} × ${item.qty}</small>
-                </div>
-              </div>
-            `).join("")}
-          </div>
-
-          <div class="order-total">
-            <p>Subtotal: ₹${o.items.reduce((s,i)=>s+i.price*i.qty,0)}</p>
-            <p>Delivery: ₹49</p>
-            <strong>Total: ₹${o.total}</strong>
-          </div>
-
+  <div class="order-items">
+    ${o.items.map(item => `
+      <div class="order-item">
+        <img src="${item.image}">
+        <div class="order-item-info">
+          <p>${item.name}</p>
+          <small>₹${item.price} × ${item.qty}</small>
         </div>
-        <span class="order-status">${o.status}</span>
-          </div>
+      </div>
+    `).join("")}
+  </div>
+
+  <!-- ✅ ORDER TRACKING (4.1) -->
+  <div class="order-tracking">
+    ${getTrackingSteps(o.status)}
+  </div>
+
+  <!-- ✅ ORDER FOOTER (STATUS + WHATSAPP) -->
+  <div class="order-footer">
+    <span class="order-status">${o.status}</span>
+
+    <button class="wa-btn"
+      onclick="openWhatsAppSupport('${doc.id}')">
+      📲 Need Help
+    </button>
+  </div>
+
+</div>
+
       `;
     });
 
@@ -360,6 +369,38 @@ async function loadMyOrders() {
     list.innerHTML = "Failed to load orders";
   }
 }
+function getTrackingSteps(status) {
+  const steps = [
+    "pending",
+    "confirmed",
+    "packed",
+    "out_for_delivery",
+    "delivered"
+  ];
+
+  if (!status) status = "pending";
+
+  if (status === "cancelled") {
+    return `<div class="track cancelled">❌ Order Cancelled</div>`;
+  }
+
+  let html = `<div class="track">`;
+
+  steps.forEach(step => {
+    const active =
+      steps.indexOf(step) <= steps.indexOf(status);
+
+    html += `
+      <span class="track-step ${active ? "active" : ""}">
+        ${step.replaceAll("_", " ")}
+      </span>
+    `;
+  });
+
+  html += `</div>`;
+  return html;
+}
+
 
 function toggleAuth() {
   isLogin = !isLogin;
@@ -445,6 +486,31 @@ function logout() {
     showThankYouMessage();
   });
 }
+function openWhatsAppSupport(orderId) {
+  const phone = "919876543210"; // 🔴 CHANGE TO YOUR SUPPORT NUMBER
+  const message = `
+Hello Instaplants 🌿
+I need help with my order.
+
+Order ID: ${orderId}
+  `.trim();
+
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank");
+}
+function openWhatsAppSupport(orderId) {
+  const phone = "919876543210"; // 🔴 CHANGE TO YOUR SUPPORT NUMBER
+  const message = `
+Hello Instaplants 🌿
+I need help with my order.
+
+Order ID: ${orderId}
+  `.trim();
+
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank");
+}
+
 
 auth.onAuthStateChanged(user => {
   const loginBtn = document.getElementById("loginBtn");
