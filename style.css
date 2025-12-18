@@ -1511,4 +1511,412 @@ body {
   opacity: 0.9;
 }
 
+.forgot-link {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #388e3c;
+  cursor: pointer;
+  margin-top: 6px;
+}
 
+.forgot-link:hover {
+  text-decoration: underline;
+}
+.user-name {
+  color: white;
+  font-size: 0.85rem;
+  margin-left: 1rem;
+  font-weight: 500;
+  opacity: 0.95;
+}
+/* ================= MOBILE NAVBAR POLISH ================= */
+@media (max-width: 768px) {
+
+  .navbar {
+    padding: 0.7rem 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 0 0 18px 18px;
+  }
+
+  .navbar nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+  }
+
+  .navbar nav a {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    border-radius: 14px;
+    white-space: nowrap;
+  }
+
+  .user-name {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 14px;
+    white-space: nowrap;
+  }
+}
+/* ================= MOBILE PRODUCT BEAUTY ================= */
+@media (max-width: 768px) {
+
+  .product-grid {
+    gap: 1.3rem;
+  }
+
+  .product-card {
+    border-radius: 20px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.12);
+  }
+
+  .product-card img {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+
+  .product-card .product-content {
+    padding: 0.9rem;
+  }
+
+  .product-card button {
+    border-radius: 18px;
+    font-size: 0.85rem;
+  }
+}
+/* ================= MOBILE CART UI ================= */
+@media (max-width: 768px) {
+
+  .cart-item {
+    padding: 1rem;
+    gap: 0.8rem;
+    border-radius: 16px;
+  }
+
+  .cart-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+  }
+
+  .qty-controls button {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .cart-summary {
+    border-radius: 22px;
+    margin-top: 1.5rem;
+  }
+}
+/* ================= MOBILE CHECKOUT ================= */
+@media (max-width: 768px) {
+
+  .checkout-form {
+    padding: 1.6rem;
+    border-radius: 24px;
+  }
+
+  .checkout-form input,
+  .checkout-form textarea {
+    border-radius: 14px;
+    font-size: 0.9rem;
+  }
+
+  .checkout-btn {
+    border-radius: 30px;
+    font-size: 1rem;
+    padding: 0.85rem;
+  }
+}
+/* ================= MOBILE ORDERS ================= */
+@media (max-width: 768px) {
+
+  .order-card {
+    border-radius: 18px;
+    padding: 1rem;
+  }
+
+  .order-item img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .track-step {
+    font-size: 0.65rem;
+    padding: 4px 8px;
+  }
+}
+/* ================= SAME DAY DELIVERY - MODAL LOGO ================= */
+.same-day-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  background: linear-gradient(135deg, #1b5e20, #66bb6a);
+  color: #ffffff;
+
+  padding: 14px 22px;
+  border-radius: 22px;
+
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+
+  width: fit-content;
+  margin: 12px 0 18px;
+
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+}
+
+/* ICON STYLE */
+.same-day-badge::before {
+  content: "🚚";
+  font-size: 1.4rem;
+}
+/* ================= FOOTER SOCIAL ================= */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.footer-about {
+  max-width: 420px;
+}
+
+.footer-about p {
+  color: #cfcfcf;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.footer-social h3 {
+  margin-bottom: 0.6rem;
+}
+
+.social-icons {
+  display: flex;
+  gap: 14px;
+}
+
+.social-icons a {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1rem;
+  transition: all 0.25s ease;
+}
+
+.social-icons a:hover {
+  background: #66bb6a;
+  transform: translateY(-2px);
+}
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+}
+.footer-about {
+  max-width: 520px;   /* 👈 prevents long empty stretch */
+}
+.social-tagline {
+  font-size: 0.85rem;
+  color: #cfcfcf;
+  margin-bottom: 0.8rem;
+}
+@media (max-width: 768px) {
+  .footer {
+    gap: 1.5rem;
+  }
+
+  .footer-about,
+  .footer-social {
+    max-width: 100%;
+  }
+
+  .footer-social {
+    margin-top: 1rem;
+  }
+}
+/* ================= SOCIAL LINKS WITH TEXT ================= */
+.social-links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 0.8rem;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  transition: all 0.2s ease;
+}
+
+.social-link i {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1rem;
+}
+
+.social-link span {
+  opacity: 0.9;
+}
+
+.social-link:hover {
+  transform: translateX(4px);
+  opacity: 1;
+}
+
+.social-link:hover i {
+  background: #66bb6a;
+}
+/* ================= PRODUCT CARD TEXT SIZE FIX ================= */
+
+/* Product name */
+.product-card h3 {
+  font-size: 1.05rem;      /* desktop */
+  line-height: 1.25;
+}
+
+/* Product description */
+.product-card p:not(.price) {
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+/* Price */
+.product-card .price {
+  font-size: 1.25rem;
+}
+
+/* Add to cart button text */
+.product-card button {
+  font-size: 0.85rem;
+}
+
+/* ================= MOBILE ADJUSTMENT ================= */
+@media (max-width: 768px) {
+
+  .product-card h3 {
+    font-size: 0.9rem;     /* smaller title */
+    line-height: 1.2;
+  }
+
+  .product-card p:not(.price) {
+    font-size: 0.78rem;
+  }
+
+  .product-card .price {
+    font-size: 1.05rem;
+  }
+
+  .product-card button {
+    font-size: 0.8rem;
+    padding: 0.55rem;
+  }
+}
+.delivery-warning {
+  background: #fff8e1;
+  border-left: 5px solid #ff9800;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  color: #5d4037;
+  line-height: 1.4;
+}
+.delivery-time-note {
+  font-size: 0.85rem;
+  color: #2e7d32;
+  margin-bottom: 12px;
+}
+/* ================= FOOTER ROUND LOGO (BIG) ================= */
+
+.footer-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 260px;          /* more space */
+  text-align: center;
+}
+
+/* Bigger circle */
+.logo-circle {
+  width: 180px;              /* 🔥 BIGGER */
+  height: 180px;             /* 🔥 BIGGER */
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+  margin-bottom: 14px;
+}
+
+/* Bigger logo inside */
+.logo-circle img {
+  width: 90%;
+  height: 90%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Tagline */
+.logo-tagline {
+  font-size: 0.95rem;        /* slightly bigger text */
+  color: #cfcfcf;
+  opacity: 0.95;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+
+  .footer-logo {
+    margin: 2rem 0;
+  }
+
+  .logo-circle {
+    width: 140px;            /* still big on mobile */
+    height: 140px;
+  }
+
+  .logo-tagline {
+    font-size: 0.85rem;
+  }
+}
