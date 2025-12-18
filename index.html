@@ -23,10 +23,12 @@
   <a onclick="showOrders()">My Orders</a>
   <a onclick="showCart()">🛒 (<span id="cartCount">0</span>)</a>
 
-  <!-- LOGIN / LOGOUT -->
+  <span id="userName" class="user-name hidden"></span>
+
   <a id="loginBtn" onclick="showLogin()">Login</a>
   <a id="logoutBtn" class="hidden" onclick="logout()">Logout</a>
 </nav>
+
 
 
 
@@ -40,6 +42,9 @@
     <input id="authPassword" type="password" placeholder="Password" required>
 
     <button type="submit">Continue</button>
+<p class="forgot-link" onclick="forgotPassword()">
+  Forgot password?
+</p>
 
     <p id="authToggle" onclick="toggleAuth()">Create new account</p>
   </form>
@@ -143,6 +148,11 @@
       <input type="radio" name="payment" value="COD" required>
       Cash on Delivery
     </label>
+<div class="delivery-warning">
+  ⚠️ Orders placed <strong>before 7:00 PM</strong> will be delivered
+  <strong>before 7:00 PM today</strong>.<br>
+  Orders after 7:00 PM will be delivered <strong>next day</strong>.
+</div>
 
     <button type="submit" class="checkout-btn">Place Order</button>
   </form>
@@ -185,13 +195,15 @@
       🚚 Same Day Delivery
     </div>
   </div>
+<p class="delivery-time-note">
+  ⚠️ Order before <strong>7:00 PM</strong> for same-day delivery
+</p>
 
   <span id="modalCategory" class="category-label"></span>
   <h1 id="modalName"></h1>
 
         <p class="modal-price">₹<span id="modalPrice"></span></p>
         <p id="modalDescription"></p>
-<div class="product-card ${p.category?.toLowerCase() || "all"}">
 
   <div class="delivery-badge">
     🚚 Same Day Delivery
@@ -213,16 +225,72 @@
 
 <!-- ================= FOOTER ================= -->
 <footer class="footer">
-  <div>
-    <h3>About Us</h3>
-    <p>Fresh plants delivered within 24 hours.</p>
-  </div>
 
-  <div>
-    <h3>Contact</h3>
-    <p>support@instaplants.com</p>
-    <p>+91 98765 43210</p>
+  <!-- ABOUT -->
+  <div class="footer-about">
+    <h3>About Instaplants</h3>
+   <p>
+  Instaplants is a modern plant delivery platform dedicated to bringing
+  nature closer to everyday living. We carefully select healthy,
+  high-quality indoor and outdoor plants and deliver them directly to
+  your doorstep with utmost care and reliability.
+</p>
+
+<p>
+  Founded by <strong>R. Rohit</strong>, <strong>G. Abhijith</strong>, and
+  <strong>S. Ruthik</strong>, Instaplants was created with a simple vision:
+  to make plant shopping easy, accessible, and enjoyable for everyone.
+  From beginners to plant enthusiasts, we aim to support every customer
+  with the right plants and proper guidance.
+</p>
+
+<p>
+  With a strong focus on quality, fast delivery, and customer
+  satisfaction, we ensure that every plant reaches you fresh and ready
+  to thrive. Our commitment goes beyond delivery — we believe in helping
+  people build greener, healthier spaces that bring calm and positivity
+  into daily life.
+</p>
+
   </div>
+  <!-- FOOTER LOGO (ROUND) -->
+<div class="footer-logo">
+  <div class="logo-circle">
+    <img
+      src="https://i.postimg.cc/pXH3Q1BW/Whats-App-Image-2025-12-18-at-9-02-07-PM.jpg"
+      alt="Instaplants Logo">
+  </div>
+  <p class="logo-tagline">Bringing Nature Home 🌿</p>
+</div>
+
+
+  <!-- SOCIAL MEDIA -->
+  <div class="footer-social">
+    <h3>Follow Us</h3>
+<div class="social-links-list">
+
+  <a href="https://www.instagram.com/instaplant3?igsh=MThnZTR0cWJjZjB0MQ==" class="social-link" aria-label="Instagram">
+    <i class="fab fa-instagram"></i>
+    <span>Instagram</span>
+  </a>
+
+  <a href="https://www.facebook.com/share/1G7F4qWGF7/" class="social-link" aria-label="Facebook">
+    <i class="fab fa-facebook-f"></i>
+    <span>Facebook</span>
+  </a>
+
+  <a href="#" class="social-link" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+    <span>WhatsApp</span>
+  </a>
+
+  <a href="http://x.com/InstaPlants" class="social-link" aria-label="Twitter">
+    <i class="fab fa-twitter"></i>
+    <span>Twitter</span>
+  </a>
+
+</div>
+</div>
 </footer>
 
 <!-- ================= TOAST ================= -->
