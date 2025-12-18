@@ -1966,3 +1966,238 @@ body {
     border-radius: 0 0 28px 28px;
   }
 }
+/* ================= HAMBURGER MENU ================= */
+
+.menu-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.nav-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* MOBILE MENU PANEL */
+.mobile-menu {
+  position: fixed;
+  top: 56px;
+  right: 10px;
+
+  background: #ffffff;
+  color: #333;
+
+  width: 200px;
+  padding: 14px;
+
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  z-index: 999;
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 10px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+
+  text-decoration: none;
+  color: #004d40;
+  font-weight: 500;
+}
+
+.mobile-menu a:hover {
+  background: #e8f5e9;
+}
+
+.menu-user {
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #1b5e20;
+}
+
+/* DESKTOP: hide hamburger menu */
+@media (min-width: 769px) {
+  .menu-btn,
+  .mobile-menu {
+    display: none;
+  }
+}
+/* ================= CLEAN NAVBAR ================= */
+.nav-main {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* ================= MENU PANEL ================= */
+.mobile-menu {
+  position: fixed;
+  top: 60px;
+  right: 16px;
+  width: 220px;
+
+  background: #ffffff;
+  color: #333;
+  padding: 16px;
+
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+  z-index: 999;
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 10px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+
+  text-decoration: none;
+  color: #004d40;
+  font-weight: 500;
+}
+
+.mobile-menu a:hover {
+  background: #e8f5e9;
+}
+
+.menu-user {
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #1b5e20;
+}
+/* ================= FORCE HAMBURGER VISIBLE ================= */
+
+.menu-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent !important;
+  border: none !important;
+
+  color: #ffffff !important;      /* WHITE */
+  font-size: 1.8rem !important;   /* BIG */
+  font-weight: bold;
+
+  cursor: pointer;
+  z-index: 1001;
+}
+.navbar {
+  overflow: visible !important;
+}
+/* ===== FIX MENU CLICK & VISIBILITY ===== */
+
+.menu-btn {
+  pointer-events: auto !important;
+  z-index: 2000 !important;
+}
+
+.mobile-menu {
+  z-index: 1999 !important;
+  pointer-events: auto !important;
+}
+.hero::after {
+  pointer-events: none !important;
+}
+.menu-btn {
+  z-index: 9999 !important;
+  pointer-events: auto !important;
+}
+
+.mobile-menu {
+  z-index: 9998 !important;
+}
+/* ================= BOTTOM STICKY CART ================= */
+
+.bottom-cart {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: calc(100% - 32px);
+  max-width: 420px;
+
+  background: #0b5d4b;
+  color: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 14px 18px;
+  border-radius: 18px;
+
+  font-weight: 600;
+  font-size: 0.95rem;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  cursor: pointer;
+  z-index: 9999;
+}
+
+.bottom-cart.hidden {
+  display: none;
+}
+
+.cart-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cart-right {
+  font-weight: 700;
+}
+
+/* Desktop: make it slightly wider */
+@media (min-width: 768px) {
+  .bottom-cart {
+    max-width: 520px;
+  }
+}
+.nav-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.navbar nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.user-name {
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0.95;
+}
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.6rem 0.9rem;
+  }
+
+  .navbar nav a {
+    font-size: 0.8rem;
+  }
+
+  .user-name {
+    font-size: 0.75rem;
+  }
+}
