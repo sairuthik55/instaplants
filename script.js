@@ -515,15 +515,29 @@ Order ID: ${orderId}
 auth.onAuthStateChanged(user => {
   const loginBtn = document.getElementById("loginBtn");
   const logoutBtn = document.getElementById("logoutBtn");
+  const userNameEl = document.getElementById("userName");
 
   if (user) {
     loginBtn.classList.add("hidden");
     logoutBtn.classList.remove("hidden");
+
+    // Get name from email (before @)
+    const name =
+      user.displayName ||
+      user.email.split("@")[0];
+
+    userNameEl.innerText = `Hi, ${name} 👋`;
+    userNameEl.classList.remove("hidden");
+
   } else {
     loginBtn.classList.remove("hidden");
     logoutBtn.classList.add("hidden");
+
+    userNameEl.classList.add("hidden");
+    userNameEl.innerText = "";
   }
 });
+
 function showWelcomeMessage() {
   const overlay = document.getElementById("welcomeOverlay");
   overlay.classList.remove("hidden");
@@ -542,6 +556,36 @@ function showThankYouMessage() {
     showHome();
   }, 3000);
 }
+function forgotPassword() {
+  const email = document.getElementById("authEmail").value;
+
+  if (!email) {
+    alert("Please enter your email first");
+    return;
+  }
+
+  auth.sendPasswordResetEmail(email)
+    .then(() => {
+      alert("📩 Password reset link sent to your email");
+    })
+    .catch(err => {
+      alert(err.message);
+    });
+}
+function checkDeliveryTimeWarning() {
+  const now = new Date();
+  const hours = now.getHours();
+
+  if (hours >= 19) {
+    document.querySelectorAll(".delivery-warning").forEach(el => {
+      el.innerHTML =
+        "⚠️ Orders placed after <strong>7:00 PM</strong> will be delivered by <strong>tomorrow 11am</strong>.";
+    });
+  }
+}
+
+checkDeliveryTimeWarning();
+
 
 /******************** INIT ********************/
 showHome();
