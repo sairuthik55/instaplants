@@ -18,21 +18,17 @@
 <!-- ================= HEADER ================= -->
 <header class="navbar">
   <div class="logo">Instaplants.</div>
-<nav>
-  <a onclick="showHome()">Home</a>
-  <a onclick="showOrders()">My Orders</a>
-  <a onclick="showCart()">🛒 (<span id="cartCount">0</span>)</a>
 
-  <span id="userName" class="user-name hidden"></span>
+  <nav class="nav-main">
+    <a onclick="showHome()">Home</a>
 
-  <a id="loginBtn" onclick="showLogin()">Login</a>
-  <a id="logoutBtn" class="hidden" onclick="logout()">Logout</a>
-</nav>
+    <span id="userName" class="user-name hidden"></span>
 
-
-
-
+    <a id="loginBtn" onclick="showLogin()">Login</a>
+    <a id="logoutBtn" class="hidden" onclick="logout()">Logout</a>
+  </nav>
 </header>
+
 <!-- ================= AUTH ================= -->
 <section id="auth" class="auth hidden">
   <form class="auth-box" onsubmit="authUser(event)">
@@ -306,6 +302,15 @@
 <div id="thankYouOverlay" class="welcome-overlay hidden">
   <div class="welcome-box">
     🌿 Thank you for visiting Instaplants
+  </div>
+</div>
+<!-- ================= BOTTOM CART BAR ================= -->
+<div id="bottomCart" class="bottom-cart hidden" onclick="showCart()">
+  <div class="cart-left">
+    🛒 <span id="bottomCartCount">0</span> items
+  </div>
+  <div class="cart-right">
+    View Cart →
   </div>
 </div>
 
