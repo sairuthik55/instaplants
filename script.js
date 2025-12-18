@@ -121,8 +121,25 @@ function addToCart(name, price, image) {
 }
 
 function updateCartCount() {
-  document.getElementById("cartCount").innerText =
-    cart.reduce((sum, item) => sum + item.qty, 0);
+  const count = cart.reduce((sum, item) => sum + item.qty, 0);
+
+  // Update navbar count (if exists)
+  const navCount = document.getElementById("cartCount");
+  if (navCount) navCount.innerText = count;
+
+  // Bottom cart
+  const bottomCart = document.getElementById("bottomCart");
+  const bottomCount = document.getElementById("bottomCartCount");
+
+  if (bottomCount) bottomCount.innerText = count;
+
+  if (bottomCart) {
+    if (count > 0) {
+      bottomCart.classList.remove("hidden");
+    } else {
+      bottomCart.classList.add("hidden");
+    }
+  }
 }
 
 function renderCart() {
@@ -521,18 +538,12 @@ auth.onAuthStateChanged(user => {
     loginBtn.classList.add("hidden");
     logoutBtn.classList.remove("hidden");
 
-    // Get name from email (before @)
-    const name =
-      user.displayName ||
-      user.email.split("@")[0];
-
+    const name = user.displayName || user.email.split("@")[0];
     userNameEl.innerText = `Hi, ${name} 👋`;
     userNameEl.classList.remove("hidden");
-
   } else {
     loginBtn.classList.remove("hidden");
     logoutBtn.classList.add("hidden");
-
     userNameEl.classList.add("hidden");
     userNameEl.innerText = "";
   }
@@ -585,6 +596,26 @@ function checkDeliveryTimeWarning() {
 }
 
 checkDeliveryTimeWarning();
+
+function toggleMenu(e) {
+  e.stopPropagation(); // 🔥 THIS IS THE KEY
+
+  const menu = document.getElementById("mobileMenu");
+  if (!menu) return;
+
+  menu.style.display =
+    menu.style.display === "block" ? "none" : "block";
+}
+
+function closeMenu() {
+  const menu = document.getElementById("mobileMenu");
+  if (menu) menu.style.display = "none";
+}
+
+/* Close menu when clicking outside */
+document.addEventListener("click", () => {
+  closeMenu();
+});
 
 
 /******************** INIT ********************/
