@@ -2425,3 +2425,37 @@ h2 {
     display: none;
   }
 }
+/* ================= ABSOLUTE MOBILE CATEGORY FIX (CHROME SAFE) ================= */
+@media (max-width: 768px) {
+
+  .category-grid.mobile-scroll {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+
+    gap: 14px !important;
+    padding: 0 12px 14px !important;
+
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+
+  .category-grid.mobile-scroll > .category-wrapper {
+    flex: 0 0 auto !important;
+    width: 140px !important;
+    scroll-snap-align: center;
+    text-align: center;
+  }
+
+  .category-grid.mobile-scroll .category-card {
+    width: 140px !important;
+    height: 140px !important;
+    border-radius: 50%;
+  }
+
+  .category-grid.mobile-scroll::-webkit-scrollbar {
+    display: none;
+  }
+}
