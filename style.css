@@ -2459,3 +2459,32 @@ h2 {
     display: none;
   }
 }
+/* ================= FULL WIDTH HERO + NAVBAR FIX ================= */
+@media (max-width: 768px) {
+
+  /* Navbar full edge */
+  .navbar {
+    border-radius: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Hero full edge */
+  .hero {
+    border-radius: 0 !important;
+    margin: 0 !important;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+  }
+}
+@media (min-width: 769px) {
+  .navbar {
+    border-radius: 0 0 18px 18px;
+  }
+
+  .hero {
+    border-radius: 0 0 30px 30px;
+  }
+}
