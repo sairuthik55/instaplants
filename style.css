@@ -2464,3 +2464,51 @@ h2 {
 .hero {
   border-radius: 0 !important;
 }
+.cancel-btn {
+  margin-top: 8px;
+  background: #c62828;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 14px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  opacity: 0.9;
+}
+/* ================= CARE TIPS WITH ICONS ================= */
+
+.care-icons-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  /* 3-line visual limit */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.care-icons-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: #444;
+}
+
+.care-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.care-text {
+  flex: 1;
+}
