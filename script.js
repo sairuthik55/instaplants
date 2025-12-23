@@ -1,21 +1,35 @@
 // script.js
 
 /******************** FIREBASE INIT ********************/
+/******************** FIREBASE INIT (NEW KEYS) ********************/
+// ================= FIREBASE INIT (NEW KEYS) =================
+
 const firebaseConfig = {
-  apiKey: "AIzaSyBJXO-TsCpd0dlV5LO84RG0yJv2_zKFEoU",
-  authDomain: "money-plant-9b247.firebaseapp.com",
-  projectId: "money-plant-9b247",
+  apiKey: "AIzaSyCb3NMFbLCBPbbxA2C7J8uMJ5ME2vs-1l4",
+  authDomain: "instaplants2.firebaseapp.com",
+  projectId: "instaplants2",
+  storageBucket: "instaplants2.firebasestorage.app",
+  messagingSenderId: "547063766288",
+  appId: "1:547063766288:web:49f80da6f1a82fb2f75995",
+  measurementId: "G-F1FXSHHJXP"
 };
 
+// ✅ Initialize Firebase ONCE
 firebase.initializeApp(firebaseConfig);
+
+// ✅ Create services ONCE
 const db = firebase.firestore();
 const auth = firebase.auth();
+
+// Auth mode
 let isLogin = true;
+
 
 /******************** LOAD PLANTS FROM FIREBASE ********************/
 const productGrid = document.getElementById("productGrid");
 
-db.collection("plants").onSnapshot(snapshot => {
+db.collection("plants")
+.onSnapshot(snapshot => {
   productGrid.innerHTML = "";
 
   snapshot.forEach(doc => {
@@ -29,10 +43,10 @@ db.collection("plants").onSnapshot(snapshot => {
           '${p.description || "Healthy premium plant"}',
           '${p.image}',
           '${p.category || "Plant"}',
-          'Water regularly||Bright indirect light||Indoor friendly'
+         '${p.careTips || "Water regularly||Bright indirect light"}'
         )">
 
-        <img src="${p.image}">
+        <img src="${p.image || 'https://images.unsplash.com/photo-1483794344563-d27a8d18014e'}">
         <div class="product-content">
           <span class="category-label">${p.category || "Plant"}</span>
           <h3>${p.name}</h3>
@@ -280,14 +294,26 @@ function showProductDetails(name, price, description, image, category, careTips)
   document.getElementById("modalCategory").innerText = category;
 
   // Care tips list
-  const tipsList = document.getElementById("modalCareTips");
-  tipsList.innerHTML = "";
+const tipsList = document.getElementById("modalCareTips");
+tipsList.innerHTML = "";
 
-  careTips.split("||").forEach(tip => {
-    const li = document.createElement("li");
-    li.innerText = tip;
-    tipsList.appendChild(li);
-  });
+const icons = ["🌞", "💧", "🌱"]; // 👈 3 icons = 3 tips
+
+const tipsArray = careTips
+  ? careTips.split("||")
+  : [];
+
+// 🔥 FORCE EXACTLY 3 ROWS
+for (let i = 0; i < 3; i++) {
+  const li = document.createElement("li");
+
+  li.innerHTML = `
+    <span class="care-icon">${icons[i]}</span>
+    <span class="care-text">${tipsArray[i] ? tipsArray[i].trim() : "—"}</span>
+  `;
+
+  tipsList.appendChild(li);
+}
 
   // Add to cart from modal
   const btn = document.getElementById("modalAddToCartBtn");
@@ -321,10 +347,10 @@ async function loadMyOrders() {
 
   try {
     const snapshot = await db
-      .collection("orders")
-      .where("userId", "==", user.uid)
-      .orderBy("createdAt", "desc")
-      .get();
+  .collection("orders")
+  .where("userId", "==", user.uid)
+  .get();
+
 
     if (snapshot.empty) {
       list.innerHTML = "No orders found";
@@ -366,15 +392,21 @@ async function loadMyOrders() {
     ${getTrackingSteps(o.status)}
   </div>
 
-  <!-- ✅ ORDER FOOTER (STATUS + WHATSAPP) -->
-  <div class="order-footer">
-    <span class="order-status">${o.status}</span>
+  <<div class="order-footer">
+  <span class="order-status">${o.status}</span>
 
-    <button class="wa-btn"
-      onclick="openWhatsAppSupport('${doc.id}')">
-      📲 Need Help
-    </button>
-  </div>
+  ${o.status === "pending" || o.status === "confirmed" ? `
+  <button class="cancel-btn"
+    onclick="cancelOrder('${doc.id}', '${o.status}')">
+    ❌ Cancel
+  </button>
+` : ""}
+
+  <button class="wa-btn"
+    onclick="openWhatsAppSupport('${doc.id}')">
+    📲 Need Help
+  </button>
+</div>
 
 </div>
 
@@ -459,25 +491,6 @@ function logout() {
 function showOrders() {
   const user = auth.currentUser;
 
-  // Not logged in → show sign-in ONLY now
-  if (!user) {
-    hideAll();
-    document.getElementById("auth").classList.remove("hidden");
-    return;
-  }
-
-  // Logged in → show orders
-  hideAll();
-  document.getElementById("orders").classList.remove("hidden");
-
-  document.getElementById("orderEmail").innerText =
-    "Logged in as: " + user.email;
-
-  loadMyOrders();
-}
-function showOrders() {
-  const user = auth.currentUser;
-
   if (!user) {
     hideAll();
     document.getElementById("auth").classList.remove("hidden");
@@ -486,15 +499,10 @@ function showOrders() {
 
   hideAll();
   document.getElementById("orders").classList.remove("hidden");
-
   document.getElementById("orderEmail").innerText =
     "Logged in as: " + user.email;
 
   loadMyOrders();
-}
-function showLogin() {
-  hideAll();
-  document.getElementById("auth").classList.remove("hidden");
 }
 
 function logout() {
@@ -503,32 +511,27 @@ function logout() {
     showThankYouMessage();
   });
 }
+
 function openWhatsAppSupport(orderId) {
-  const phone = "918639533425"; // 🔴 CHANGE TO YOUR SUPPORT NUMBER
+  const phone = "918639533425";
   const message = `
 Hello Instaplants 🌿
 I need help with my order.
-
 Order ID: ${orderId}
   `.trim();
 
-  const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-  window.open(url, "_blank");
-}
-function openWhatsAppSupport(orderId) {
-  const phone = "918639533425"; // 🔴 CHANGE TO YOUR SUPPORT NUMBER
-  const message = `
-Hello Instaplants 🌿
-I need help with my order.
-
-Order ID: ${orderId}
-  `.trim();
-
-  const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-  window.open(url, "_blank");
+  window.open(
+    `https://wa.me/${phone}?text=${encodeURIComponent(message)}`,
+    "_blank"
+  );
 }
 
-
+function logout() {
+  auth.signOut().then(() => {
+    hideAll();
+    showThankYouMessage();
+  });
+}
 auth.onAuthStateChanged(user => {
   const loginBtn = document.getElementById("loginBtn");
   const logoutBtn = document.getElementById("logoutBtn");
@@ -617,6 +620,94 @@ document.addEventListener("click", () => {
   closeMenu();
 });
 
+async function cancelOrder(orderId) {
+  const confirmCancel = confirm(
+    "Are you sure?\nYou can cancel only before shipping."
+  );
+
+  if (!confirmCancel) return;
+
+  try {
+    await db.collection("orders").doc(orderId).update({
+      status: "cancelled"
+    });
+
+    alert("✅ Order cancelled successfully");
+  } catch (err) {
+    console.error(err);
+    alert("❌ Unable to cancel order");
+  }
+}
+function renderOrders(orders) {
+  const list = document.getElementById("ordersList");
+  list.innerHTML = "";
+
+  orders.forEach(order => {
+    const canCancel = order.status === "pending"; // 👈 STEP 3 LOGIC
+
+    list.innerHTML += `
+      <div class="order-card">
+
+        <div class="order-header">
+          <strong>Order ID:</strong> ${order.id}
+          <span class="order-status">${order.status}</span>
+        </div>
+
+        <div class="order-items">
+          ${order.items.map(item => `
+            <div class="order-item">
+              <img src="${item.image}">
+              <div>${item.name} × ${item.qty}</div>
+            </div>
+          `).join("")}
+        </div>
+
+        <div class="order-footer">
+          <div><strong>Total:</strong> ₹${order.total}</div>
+
+          ${
+            canCancel
+              ? `<button class="cancel-btn"
+                   onclick="cancelOrder('${order.id}')">
+                   Cancel Order
+                 </button>`
+              : ""
+          }
+        </div>
+
+      </div>
+    `;
+  });
+}
+async function cancelOrder(orderId, currentStatus) {
+
+  // 🔒 HARD BLOCK (VERY IMPORTANT)
+  if (currentStatus !== "pending" && currentStatus !== "confirmed") {
+    alert("❌ This order can no longer be cancelled");
+    return;
+  }
+
+  const confirmCancel = confirm(
+    "Are you sure you want to cancel this order?"
+  );
+
+  if (!confirmCancel) return;
+
+  try {
+    await db.collection("orders").doc(orderId).update({
+      status: "cancelled",
+      cancelledAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    alert("❌ Order cancelled successfully");
+
+    loadMyOrders(); // refresh UI
+
+  } catch (err) {
+    console.error(err);
+    alert("Failed to cancel order");
+  }
+}
 
 /******************** INIT ********************/
 showHome();
