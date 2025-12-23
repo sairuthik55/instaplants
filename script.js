@@ -708,6 +708,10 @@ async function cancelOrder(orderId, currentStatus) {
     alert("Failed to cancel order");
   }
 }
+function showLogin() {
+  hideAll();
+  document.getElementById("auth").classList.remove("hidden");
+}
 
 /******************** INIT ********************/
 showHome();
