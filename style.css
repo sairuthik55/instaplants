@@ -2638,3 +2638,37 @@ h2 {
   padding-top: 0.3rem; /* 👈 closer to image */
   font-size: 0.85rem;
 }
+@media (max-width: 768px) {
+  .category-grid {
+    display: flex;
+    gap: 0.8rem;
+    overflow-x: auto;          /* ✅ enable scroll */
+    overflow-y: hidden;
+    padding: 0.5rem 1rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .category-wrapper {
+    min-width: 110px;          /* ✅ allows scrolling */
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+
+  .category-card {
+    width: 110px;
+    height: 110px;
+  }
+
+  .category-wrapper p {
+    font-size: 0.75rem;
+    margin-top: 0.3rem;
+    text-align: center;
+  }
+}
+.category-grid::-webkit-scrollbar {
+  display: none;
+}
+.category-grid {
+  scrollbar-width: none;
+}
