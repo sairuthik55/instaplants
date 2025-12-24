@@ -122,9 +122,12 @@
   <div id="emptyCart">🛒 Your cart is empty</div>
   <div id="cartList"></div>
 
-  <div class="cart-summary">
-    <button class="checkout-btn" onclick="showCheckout()">Proceed to Checkout</button>
-  </div>
+ <div class="cart-summary">
+  <button class="checkout-btn" onclick="showCheckout()">
+    Proceed to Checkout
+  </button>
+</div>
+
 </section>
 
 <!-- ================= CHECKOUT ================= -->
@@ -137,9 +140,11 @@
 
     <h3>Address</h3>
     <input id="house" placeholder="House / Flat No." required>
-    <button type="button" class="checkout-btn" onclick="autoDetectArea()">
-  📍 Detect My Area
+
+    <button type="button" class="detect-btn" onclick="detectArea()">
+  📍 Auto Detect Area
 </button>
+
 
     <input id="street" placeholder="Street / Area" required>
     <input id="city" placeholder="City" required>
@@ -158,7 +163,17 @@
   <strong>before 7:00 PM today</strong>.<br>
   Orders after 7:00 PM will be delivered <strong>next day</strong>.
 </div>
-<!-- FINAL BILL -->
+<!-- BILL SUMMARY -->
+<div class="bill-summary">
+  <h3>Bill Details</h3>
+
+  <p>Subtotal: ₹<span id="billSubtotal">0</span></p>
+  <p>Delivery Charge: ₹<span id="billDelivery">0</span></p>
+
+  <hr>
+
+  <h2>Total: ₹<span id="billTotal">0</span></h2>
+</div>
 
     <button type="submit" class="checkout-btn">Place Order</button>
   </form>
@@ -324,37 +339,6 @@
     View Cart →
   </div>
 </div>
-<!-- FINAL BILL MODAL -->
-<div id="billModal" class="product-modal hidden">
-  <div class="modal-content" style="max-width:500px">
-
-    <button class="modal-close-btn" onclick="closeBill()">✕</button>
-
-    <h2 style="color:#1b5e20">Final Bill</h2>
-
-    <div class="bill-row">
-      <span>Subtotal</span>
-      <span>₹<span id="billSubtotal">0</span></span>
-    </div>
-
-    <div class="bill-row">
-      <span>Delivery Charge</span>
-      <span>₹<span id="billDelivery">0</span></span>
-    </div>
-
-    <hr>
-
-    <div class="bill-row total">
-      <span>Total Payable</span>
-      <span>₹<span id="billTotal">0</span></span>
-    </div>
-
-    <button class="checkout-btn" onclick="confirmPlaceOrder()">
-      Confirm Order
-    </button>
-  </div>
-</div>
-
 
 <!-- ================= FIREBASE ================= -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
