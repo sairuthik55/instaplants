@@ -1,4 +1,5 @@
 // script.js
+// script.js
 // 📍 AREA BASED DELIVERY CHARGES
 const AREA_DELIVERY_MAP = {
   // 🟢 Zone 1 – ₹29
@@ -32,6 +33,7 @@ const AREA_DELIVERY_MAP = {
   "patancheru": 79,
   "moinabad": 79,
 };
+
 
 const DEFAULT_DELIVERY_CHARGE = 99;
 
@@ -100,6 +102,7 @@ db.collection("plants")
 
 /******************** GLOBALS ********************/
 let cart = []; // TEMP CART (NOT STORED)
+const DELIVERY_CHARGE = 49;
 
 /******************** PAGE CONTROL ********************/
 function hideAll() {
@@ -114,11 +117,14 @@ function hideAll() {
 function showHome() {
   hideAll();
   document.getElementById("home").classList.remove("hidden");
+  scrollToTop();   // ✅ ADD
 }
+
 
 function showCart() {
   hideAll();
   document.getElementById("cart").classList.remove("hidden");
+  scrollToTop();   // ✅ ADD THIS
   renderCart();
 }
 
@@ -127,8 +133,10 @@ function showCheckout() {
     alert("Your cart is empty!");
     return;
   }
+
   hideAll();
   document.getElementById("checkout").classList.remove("hidden");
+  scrollToTop();   // ✅ ADD THIS
 }
 
 /******************** CATEGORY FILTER ********************/
@@ -236,13 +244,14 @@ function renderCart() {
   });
 
   subtotalEl.innerText = subtotal;
-  const areaInput = document.getElementById("street"); // area field
+ const areaInput = document.getElementById("street"); // area field
 const area = areaInput ? areaInput.value : "";
 
 const deliveryCharge = getDeliveryChargeByArea(area);
 
 document.getElementById("deliveryCharge").innerText = deliveryCharge;
 totalEl.innerText = subtotal + deliveryCharge;
+
 }
 
 function changeQty(index, value) {
@@ -263,68 +272,57 @@ function removeItem(index) {
 }
 
 /******************** PLACE ORDER (FIREBASE ONLY HERE) ********************/
-function placeOrder(event) {
+async function placeOrder(event) {
   event.preventDefault();
 
-  if (cart.length === 0) {
-    alert("Cart is empty");
-    return;
+  // ✅ CONFIRMATION STEP
+  const confirmOrder = confirm(
+    "🪴 Please confirm your order.\n\nDo you want to place this order now?"
+  );
+
+  if (!confirmOrder) {
+    return; // ❌ User cancelled
   }
 
-  const area = document.getElementById("street").value.trim();
-  const deliveryCharge = getDeliveryChargeByArea(area);
-
-  let subtotal = 0;
-  for (let i = 0; i < cart.length; i++) {
-    subtotal += cart[i].price * cart[i].qty;
-  }
-
-  document.getElementById("billSubtotal").innerText = subtotal;
-  document.getElementById("billDelivery").innerText = deliveryCharge;
-  document.getElementById("billTotal").innerText =
-    subtotal + deliveryCharge;
-
-  document.getElementById("billModal").classList.remove("hidden");
-}
-
-
- async function confirmPlaceOrder() {
   try {
     const user = auth.currentUser;
     if (!user) throw new Error("Not logged in");
+    if (cart.length === 0) throw new Error("Cart empty");
+const area = document.getElementById("street").value.trim();
+const deliveryCharge = getDeliveryChargeByArea(area);
 
-    const area = document.getElementById("street").value.trim();
-    const deliveryCharge = getDeliveryChargeByArea(area);
+const subtotal = cart.reduce(
+  (sum, item) => sum + item.price * item.qty,
+  0
+);
 
-    let subtotal = 0;
-    for (let i = 0; i < cart.length; i++) {
-      subtotal += cart[i].price * cart[i].qty;
-    }
+   const orderData = {
+  userId: user.uid,
 
-    const orderData = {
-      userId: user.uid,
+  customer: {
+    name: document.getElementById("name").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
+    email: document.getElementById("email").value.trim()
+  },
 
-      customer: {
-        name: document.getElementById("name").value.trim(),
-        phone: document.getElementById("phone").value.trim(),
-        email: document.getElementById("email").value.trim()
-      },
+  address: {
+    house: house.value,
+    street: street.value,   // AREA USED HERE
+    city: city.value,
+    state: state.value,
+    pincode: pincode.value
+  },
 
-      address: {
-        house: house.value,
-        street: street.value,
-        city: city.value,
-        state: state.value,
-        pincode: pincode.value
-      },
+  items: cart,
 
-      items: cart,
-      subtotal: subtotal,
-      deliveryCharge: deliveryCharge,
-      total: subtotal + deliveryCharge,
-      status: "pending",
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
+  subtotal: subtotal,
+  deliveryCharge: deliveryCharge,
+  total: subtotal + deliveryCharge,
+
+  status: "pending",
+  createdAt: firebase.firestore.FieldValue.serverTimestamp()
+};
+
 
     await db.collection("orders").add(orderData);
 
@@ -332,11 +330,11 @@ function placeOrder(event) {
 
     cart = [];
     updateCartCount();
-    closeBill();
     showHome();
 
-  } catch (err) {
-    alert("❌ " + err.message);
+  } catch (error) {
+    console.error(error);
+    alert("❌ " + error.message);
   }
 }
 
@@ -557,16 +555,20 @@ function showOrders() {
   if (!user) {
     hideAll();
     document.getElementById("auth").classList.remove("hidden");
+    scrollToTop();   // ✅ ADD
     return;
   }
 
   hideAll();
   document.getElementById("orders").classList.remove("hidden");
+  scrollToTop();     // ✅ ADD
+
   document.getElementById("orderEmail").innerText =
     "Logged in as: " + user.email;
 
   loadMyOrders();
 }
+
 
 function logout() {
   auth.signOut().then(() => {
@@ -808,112 +810,96 @@ if (modalContent) {
   });
 }
 function getDeliveryChargeByArea(area) {
-  if (!area || area.length < 2) {
-    return DEFAULT_DELIVERY_CHARGE;
-  }
+  if (!area) return DEFAULT_DELIVERY_CHARGE;
 
-  const input = area
-    .toLowerCase()
-    .replace(/[^a-z\s]/g, "")
-    .trim();
-
-  const words = input.split(/\s+/);
-
-  let bestMatch = null;
-  let bestScore = 0;
+  const key = area.toLowerCase().trim();
 
   for (const location in AREA_DELIVERY_MAP) {
-    const locationWords = location.split(" ");
-    let score = 0;
-
-    locationWords.forEach(locWord => {
-      words.forEach(inputWord => {
-        // 🔥 PARTIAL MATCH (core logic)
-        if (
-          locWord.startsWith(inputWord) ||
-          inputWord.startsWith(locWord) ||
-          locWord.includes(inputWord) ||
-          inputWord.includes(locWord)
-        ) {
-          score++;
-        }
-      });
-    });
-
-    if (score > bestScore) {
-      bestScore = score;
-      bestMatch = location;
+    if (key.includes(location)) {
+      return AREA_DELIVERY_MAP[location];
     }
   }
 
-  // ✅ If at least 1 strong match → guess area
-  if (bestMatch && bestScore >= 1) {
-    return AREA_DELIVERY_MAP[bestMatch];
-  }
-
-  // ❌ Completely unknown
   return DEFAULT_DELIVERY_CHARGE;
 }
-
-function updateFinalBill() {
+function updateCheckoutBill() {
   const area = document.getElementById("street").value.trim();
-  const deliveryCharge = getDeliveryChargeByArea(area);
 
   const subtotal = cart.reduce(
     (sum, item) => sum + item.price * item.qty,
     0
   );
 
+  const deliveryCharge = getDeliveryChargeByArea(area);
+
   document.getElementById("billSubtotal").innerText = subtotal;
   document.getElementById("billDelivery").innerText = deliveryCharge;
   document.getElementById("billTotal").innerText = subtotal + deliveryCharge;
 }
-document.addEventListener("input", (e) => {
-  if (e.target.id === "street")
-    if (deliveryCharge === DEFAULT_DELIVERY_CHARGE) {
-  console.warn("⚠️ Area not matched, using default delivery");
-}
- 
-    {
-    updateFinalBill();
-    
+document.addEventListener("DOMContentLoaded", () => {
+  const streetInput = document.getElementById("street");
+
+  if (streetInput) {
+    streetInput.addEventListener("input", updateCheckoutBill);
   }
 });
-function autoDetectArea() {
+function detectArea() {
   if (!navigator.geolocation) {
     alert("Location not supported on this device");
     return;
   }
 
   navigator.geolocation.getCurrentPosition(
-    async (position) => {
+    async position => {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
 
       try {
-        // 🌍 FREE reverse lookup (OpenStreetMap)
         const res = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`,
+          {
+            headers: {
+              "Accept": "application/json"
+            }
+          }
         );
+
         const data = await res.json();
 
-        const address = data.address || {};
+        if (!data.address) {
+          alert("Unable to detect area");
+          return;
+        }
+
+        const address = data.address;
+
+        // Best possible area detection
         const area =
           address.suburb ||
           address.neighbourhood ||
+          address.residential ||
+          address.quarter ||
           address.city_district ||
-          address.village ||
           "";
 
-        // Fill area automatically
-        const streetInput = document.getElementById("street");
-        streetInput.value = area;
+        if (area) {
+          document.getElementById("street").value = area;
+        }
 
-        // Trigger delivery fee calculation
-        streetInput.dispatchEvent(new Event("input"));
+        if (address.postcode) {
+          document.getElementById("pincode").value = address.postcode;
+        }
+
+        if (address.city) {
+          document.getElementById("city").value = address.city;
+        }
+
+        // 🔄 Update bill after auto fill
+        updateCheckoutBill();
 
       } catch (err) {
-        alert("Unable to detect area, please type manually");
+        alert("Failed to detect area");
+        console.error(err);
       }
     },
     () => {
@@ -921,51 +907,13 @@ function autoDetectArea() {
     }
   );
 }
-async function confirmPlaceOrder() {
-  try {
-    const user = auth.currentUser;
-    if (!user) throw new Error("Not logged in");
-
-    const area = document.getElementById("street").value;
-    const deliveryCharge = getDeliveryChargeByArea(area);
-
-    const subtotal = cart.reduce(
-      (sum, item) => sum + item.price * item.qty,
-      0
-    );
-
-    const orderData = {
-      userId: user.uid,
-      items: cart,
-      address: {
-        house: house.value,
-        street: street.value,
-        city: city.value,
-        state: state.value,
-        pincode: pincode.value
-      },
-      subtotal,
-      deliveryCharge,
-      total: subtotal + deliveryCharge,
-      status: "pending",
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
-
-    await db.collection("orders").add(orderData);
-
-    alert("✅ Order placed successfully");
-
-    cart = [];
-    updateCartCount();
-    closeBill();
-    showHome();
-
-  } catch (err) {
-    alert("❌ " + err.message);
-  }
-}
-function closeBill() {
-  document.getElementById("billModal").classList.add("hidden");
+streetInput.addEventListener("input", updateCheckoutBill);
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: "instant" // no animation, prevents jump
+  });
 }
 
 
