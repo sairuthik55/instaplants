@@ -100,7 +100,7 @@ function showCheckout() {
 /******************** CATEGORY FILTER ********************/
 function filterCategory(category) {
   document.querySelectorAll(".product-card").forEach(card => {
-    // Categories are now 'indoor', 'outdoor', 'succulent', 'flowering'
+    // Categories are now 'indoor', 'outdoor', 'succulent', 'flowering','hanging'
     card.style.display =
       category === "all" || card.classList.contains(category)
         ? "block"
