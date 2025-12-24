@@ -1,4 +1,39 @@
 // script.js
+// 📍 AREA BASED DELIVERY CHARGES
+const AREA_DELIVERY_MAP = {
+  // 🟢 Zone 1 – ₹29
+  "gachibowli": 29,
+  "hitech city": 29,
+  "madhapur": 29,
+  "kondapur": 29,
+  "shaikpet": 29,
+  "nanakramguda": 29,
+  "financial district": 29,
+  "kokapet": 29,
+  "banjara hills": 29,
+  "begumpet": 29,
+  "ameerpet": 29,
+  "sr nagar": 29,
+  "masab tank": 29,
+  "narsingi": 29,
+  "manikonda": 29,
+  "puppalguda": 29,
+
+
+  // 🟡 Zone 2 – ₹49
+  "tolichowki": 49,
+  "mehdipatnam": 49,
+  "attapur": 49,
+  "rajendranagar": 49,
+  "kukatpally": 49,
+  "miyapur": 49,
+
+  // 🔴 Zone 3 – ₹79
+  "patancheru": 79,
+  "moinabad": 79,
+};
+
+const DEFAULT_DELIVERY_CHARGE = 99;
 
 /******************** FIREBASE INIT ********************/
 /******************** FIREBASE INIT (NEW KEYS) ********************/
@@ -65,7 +100,6 @@ db.collection("plants")
 
 /******************** GLOBALS ********************/
 let cart = []; // TEMP CART (NOT STORED)
-const DELIVERY_CHARGE = 49;
 
 /******************** PAGE CONTROL ********************/
 function hideAll() {
@@ -202,7 +236,13 @@ function renderCart() {
   });
 
   subtotalEl.innerText = subtotal;
-  totalEl.innerText = subtotal + DELIVERY_CHARGE;
+  const areaInput = document.getElementById("street"); // area field
+const area = areaInput ? areaInput.value : "";
+
+const deliveryCharge = getDeliveryChargeByArea(area);
+
+document.getElementById("deliveryCharge").innerText = deliveryCharge;
+totalEl.innerText = subtotal + deliveryCharge;
 }
 
 function changeQty(index, value) {
@@ -223,22 +263,43 @@ function removeItem(index) {
 }
 
 /******************** PLACE ORDER (FIREBASE ONLY HERE) ********************/
-async function placeOrder(event) {
+function placeOrder(event) {
   event.preventDefault();
 
-  // ✅ CONFIRMATION STEP
-  const confirmOrder = confirm(
-    "🪴 Please confirm your order.\n\nDo you want to place this order now?"
-  );
-
-  if (!confirmOrder) {
-    return; // ❌ User cancelled
+  if (cart.length === 0) {
+    alert("Cart is empty");
+    return;
   }
 
+  const area = document.getElementById("street").value.trim();
+  const deliveryCharge = getDeliveryChargeByArea(area);
+
+  let subtotal = 0;
+  for (let i = 0; i < cart.length; i++) {
+    subtotal += cart[i].price * cart[i].qty;
+  }
+
+  document.getElementById("billSubtotal").innerText = subtotal;
+  document.getElementById("billDelivery").innerText = deliveryCharge;
+  document.getElementById("billTotal").innerText =
+    subtotal + deliveryCharge;
+
+  document.getElementById("billModal").classList.remove("hidden");
+}
+
+
+ async function confirmPlaceOrder() {
   try {
     const user = auth.currentUser;
     if (!user) throw new Error("Not logged in");
-    if (cart.length === 0) throw new Error("Cart empty");
+
+    const area = document.getElementById("street").value.trim();
+    const deliveryCharge = getDeliveryChargeByArea(area);
+
+    let subtotal = 0;
+    for (let i = 0; i < cart.length; i++) {
+      subtotal += cart[i].price * cart[i].qty;
+    }
 
     const orderData = {
       userId: user.uid,
@@ -258,7 +319,9 @@ async function placeOrder(event) {
       },
 
       items: cart,
-      total: cart.reduce((s, i) => s + i.price * i.qty, 0) + 49,
+      subtotal: subtotal,
+      deliveryCharge: deliveryCharge,
+      total: subtotal + deliveryCharge,
       status: "pending",
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
@@ -269,11 +332,11 @@ async function placeOrder(event) {
 
     cart = [];
     updateCartCount();
+    closeBill();
     showHome();
 
-  } catch (error) {
-    console.error(error);
-    alert("❌ " + error.message);
+  } catch (err) {
+    alert("❌ " + err.message);
   }
 }
 
@@ -744,7 +807,169 @@ if (modalContent) {
     isSwiping = false;
   });
 }
+function getDeliveryChargeByArea(area) {
+  if (!area || area.length < 2) {
+    return DEFAULT_DELIVERY_CHARGE;
+  }
+
+  const input = area
+    .toLowerCase()
+    .replace(/[^a-z\s]/g, "")
+    .trim();
+
+  const words = input.split(/\s+/);
+
+  let bestMatch = null;
+  let bestScore = 0;
+
+  for (const location in AREA_DELIVERY_MAP) {
+    const locationWords = location.split(" ");
+    let score = 0;
+
+    locationWords.forEach(locWord => {
+      words.forEach(inputWord => {
+        // 🔥 PARTIAL MATCH (core logic)
+        if (
+          locWord.startsWith(inputWord) ||
+          inputWord.startsWith(locWord) ||
+          locWord.includes(inputWord) ||
+          inputWord.includes(locWord)
+        ) {
+          score++;
+        }
+      });
+    });
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestMatch = location;
+    }
+  }
+
+  // ✅ If at least 1 strong match → guess area
+  if (bestMatch && bestScore >= 1) {
+    return AREA_DELIVERY_MAP[bestMatch];
+  }
+
+  // ❌ Completely unknown
+  return DEFAULT_DELIVERY_CHARGE;
+}
+
+function updateFinalBill() {
+  const area = document.getElementById("street").value.trim();
+  const deliveryCharge = getDeliveryChargeByArea(area);
+
+  const subtotal = cart.reduce(
+    (sum, item) => sum + item.price * item.qty,
+    0
+  );
+
+  document.getElementById("billSubtotal").innerText = subtotal;
+  document.getElementById("billDelivery").innerText = deliveryCharge;
+  document.getElementById("billTotal").innerText = subtotal + deliveryCharge;
+}
+document.addEventListener("input", (e) => {
+  if (e.target.id === "street")
+    if (deliveryCharge === DEFAULT_DELIVERY_CHARGE) {
+  console.warn("⚠️ Area not matched, using default delivery");
+}
+ 
+    {
+    updateFinalBill();
+    
+  }
+});
+function autoDetectArea() {
+  if (!navigator.geolocation) {
+    alert("Location not supported on this device");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      try {
+        // 🌍 FREE reverse lookup (OpenStreetMap)
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+        );
+        const data = await res.json();
+
+        const address = data.address || {};
+        const area =
+          address.suburb ||
+          address.neighbourhood ||
+          address.city_district ||
+          address.village ||
+          "";
+
+        // Fill area automatically
+        const streetInput = document.getElementById("street");
+        streetInput.value = area;
+
+        // Trigger delivery fee calculation
+        streetInput.dispatchEvent(new Event("input"));
+
+      } catch (err) {
+        alert("Unable to detect area, please type manually");
+      }
+    },
+    () => {
+      alert("Location permission denied");
+    }
+  );
+}
+async function confirmPlaceOrder() {
+  try {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Not logged in");
+
+    const area = document.getElementById("street").value;
+    const deliveryCharge = getDeliveryChargeByArea(area);
+
+    const subtotal = cart.reduce(
+      (sum, item) => sum + item.price * item.qty,
+      0
+    );
+
+    const orderData = {
+      userId: user.uid,
+      items: cart,
+      address: {
+        house: house.value,
+        street: street.value,
+        city: city.value,
+        state: state.value,
+        pincode: pincode.value
+      },
+      subtotal,
+      deliveryCharge,
+      total: subtotal + deliveryCharge,
+      status: "pending",
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    await db.collection("orders").add(orderData);
+
+    alert("✅ Order placed successfully");
+
+    cart = [];
+    updateCartCount();
+    closeBill();
+    showHome();
+
+  } catch (err) {
+    alert("❌ " + err.message);
+  }
+}
+function closeBill() {
+  document.getElementById("billModal").classList.add("hidden");
+}
+
 
 /******************** INIT ********************/
 showHome();
 updateCartCount();
+
