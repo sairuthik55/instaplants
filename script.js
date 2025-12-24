@@ -712,6 +712,38 @@ function showLogin() {
   hideAll();
   document.getElementById("auth").classList.remove("hidden");
 }
+let startY = 0;
+let currentY = 0;
+let isSwiping = false;
+
+const modalContent = document.querySelector(".modal-content");
+
+if (modalContent) {
+  modalContent.addEventListener("touchstart", e => {
+    startY = e.touches[0].clientY;
+    isSwiping = true;
+  });
+
+  modalContent.addEventListener("touchmove", e => {
+    if (!isSwiping) return;
+    currentY = e.touches[0].clientY;
+  });
+
+  modalContent.addEventListener("touchend", () => {
+    if (!isSwiping) return;
+
+    const diff = currentY - startY;
+
+    // ⬇️ SWIPE DOWN THRESHOLD
+    if (diff > 80) {
+      hideProductDetails(); // ✅ CLOSE MODAL
+    }
+
+    startY = 0;
+    currentY = 0;
+    isSwiping = false;
+  });
+}
 
 /******************** INIT ********************/
 showHome();
