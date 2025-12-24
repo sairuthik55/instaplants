@@ -2512,3 +2512,18 @@ h2 {
 .care-text {
   flex: 1;
 }
+.product-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;              /* ✅ ALLOW SCROLL */
+  padding: 20px 12px;
+}
+.modal-content {
+  max-height: 90vh;              /* ✅ NOT FULL SCREEN */
+  overflow-y: auto;              /* ✅ INTERNAL SCROLL */
+}
