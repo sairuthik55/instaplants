@@ -2545,3 +2545,41 @@ h2 {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
+
+/* FINAL BILL */
+.final-bill {
+  margin: 1.5rem 0;
+  padding: 1.2rem;
+  background: #f1f7f1;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.12);
+}
+
+.final-bill h3 {
+  margin-bottom: 0.8rem;
+  color: #1b5e20;
+}
+
+.bill-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.bill-row.total {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-top: 0.8rem;
+}
+.bill-row {
+  display:flex;
+  justify-content:space-between;
+  margin:10px 0;
+  font-size:1rem;
+}
+
+.bill-row.total {
+  font-weight:700;
+  font-size:1.1rem;
+}
