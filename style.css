@@ -2527,3 +2527,21 @@ h2 {
   max-height: 90vh;              /* ✅ NOT FULL SCREEN */
   overflow-y: auto;              /* ✅ INTERNAL SCROLL */
 }
+/* ===== SWIPE DOWN HANDLE ===== */
+.modal-swipe-handle {
+  width: 40px;
+  height: 5px;
+  background: #ccc;
+  border-radius: 10px;
+  margin: 0 auto 12px;
+}
+
+/* Smooth close animation */
+.product-modal {
+  transition: opacity 0.25s ease;
+}
+.modal-content {
+  max-height: 90vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
