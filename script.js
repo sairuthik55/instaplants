@@ -880,6 +880,7 @@ function detectArea() {
           address.residential ||
           address.quarter ||
           address.city_district ||
+          address.state ||
           "";
 
         if (area) {
@@ -894,6 +895,9 @@ function detectArea() {
           document.getElementById("city").value = address.city;
         }
 
+         if (address.state) {
+          document.getElementById("state").value = address.state;
+        }
         // 🔄 Update bill after auto fill
         updateCheckoutBill();
 
