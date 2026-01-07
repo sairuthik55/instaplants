@@ -396,6 +396,182 @@ function addToCartFromCard(e, name, price, image) {
 document.addEventListener("DOMContentLoaded", () => {
   updateCartCount();
 });
+document.addEventListener("DOMContentLoaded", () => {
+
+  const botToggle = document.getElementById("botToggle");
+  const chatBot = document.getElementById("chatBot");
+  const botClose = document.getElementById("botClose");
+  const botSend = document.getElementById("botSend");
+  const botInput = document.getElementById("botInput");
+  const botMessages = document.getElementById("botMessages");
+
+  if (!botToggle) return;
+
+  botToggle.onclick = () => chatBot.classList.toggle("hidden");
+  botClose.onclick = () => chatBot.classList.add("hidden");
+
+  botSend.onclick = sendBotMessage;
+  botInput.addEventListener("keypress", e => {
+    if (e.key === "Enter") sendBotMessage();
+  });
+
+  /* 🌱 PLANT DATABASE (ALL PLANTS) */
+  const plants = {
+    "ficus ginseng": plant("Ficus Ginseng", "Indoor bonsai plant, improves aesthetics.",
+      ["Bright indirect light", "Water when soil is dry", "Avoid cold air"]),
+    "moon cactus": plant("Moon Cactus", "Colorful succulent grafted cactus.",
+      ["Bright light", "Water once in 10 days", "Do not overwater"]),
+    "peace lily": plant("Peace Lily", "Air-purifying flowering plant.",
+      ["Low to medium light", "Keep soil moist", "Mist leaves"]),
+    "aloe vera": plant("Aloe Vera", "Medicinal succulent plant.",
+      ["Direct sunlight", "Water once a week", "Well-drained soil"]),
+    "chinese evergreen": plant("Chinese Evergreen", "Low-light tolerant indoor plant.",
+      ["Low light", "Water moderately", "Avoid direct sun"]),
+    "marigold": plant("Marigold", "Seasonal flowering plant.",
+      ["Full sunlight", "Water daily", "Deadhead flowers"]),
+    "lucky bamboo": plant("Lucky Bamboo", "Symbol of good luck.",
+      ["Indirect light", "Change water weekly", "Use filtered water"]),
+    "money plant": plant("Money Plant", "Fast-growing indoor & hanging plant.",
+      ["Indirect sunlight", "Water twice weekly", "Can grow in water"]),
+    "dahlia": plant("Dahlia", "Bright seasonal flowering plant.",
+      ["Full sun", "Water regularly", "Loose soil"]),
+    "jade plant": plant("Jade Plant", "Succulent and lucky plant.",
+      ["Bright sunlight", "Water weekly", "Dry soil between watering"]),
+    "spider plant": plant("Spider Plant", "Air-purifying hanging plant.",
+      ["Indirect sunlight", "Water twice weekly", "Easy care"]),
+    "christmas star": plant("Christmas Star (Poinsettia)", "Decorative festive plant.",
+      ["Bright indirect light", "Light watering", "Avoid cold"]),
+    "tradescantia zebrina": plant("Tradescantia Zebrina", "Fast-growing trailing plant.",
+      ["Bright indirect light", "Water regularly", "Pinch stems"]),
+    "ming aralia": plant("Ming Aralia", "Elegant indoor foliage plant.",
+      ["Bright filtered light", "High humidity", "Moderate watering"]),
+    "zinnia": plant("Zinnia", "Outdoor flowering plant.",
+      ["Full sunlight", "Regular watering", "Well-drained soil"]),
+    "rex begonia": plant("Rex Begonia", "Colorful foliage plant.",
+      ["Indirect light", "Moist soil", "Avoid wet leaves"]),
+    "perle von nurnberg": plant("Perle von Nurnberg", "Purple succulent plant.",
+      ["Bright light", "Minimal watering", "Good drainage"]),
+    "jelly bean sedum": plant("Jelly Bean Sedum", "Cute succulent with jelly-like leaves.",
+      ["Full sun", "Water sparingly", "Dry soil"]),
+    "dwarf jade": plant("Dwarf Jade", "Mini succulent bonsai plant.",
+      ["Bright light", "Water weekly", "Dry soil"]),
+    "desert rose": plant("Desert Rose", "Flowering succulent plant.",
+      ["Full sun", "Water lightly", "Well-drained soil"]),
+    "bronze mum": plant("Bronze Mum", "Seasonal chrysanthemum flower.",
+      ["Bright sunlight", "Water regularly", "Pinch buds"]),
+    "guldaudi": plant("Guldaudi (Chrysanthemum)", "Traditional flowering plant.",
+      ["Full sun", "Regular watering", "Loose soil"])
+  };
+
+  function plant(name, info, care) {
+    return { name, info, care };
+  }
+
+  function sendBotMessage() {
+    const msg = botInput.value.trim().toLowerCase();
+    if (!msg) return;
+
+    botMessages.innerHTML += `<div class="bot-user-msg">${msg}</div>`;
+    botInput.value = "";
+    botMessages.scrollTop = botMessages.scrollHeight;
+
+    setTimeout(() => botReply(msg), 400);
+  }
+
+function botReply(text) {
+
+  /* normalize input */
+  text = text.toLowerCase().trim();
+
+  /* 📞 CUSTOMER CARE KEYWORDS */
+  const customerCareKeywords = [
+    "customer care",
+    "customer support",
+    "support",
+    "contact",
+    "enquiry",
+    "inquiry",
+    "help",
+    "call",
+    "phone"
+  ];
+
+  /* ================= CUSTOMER CARE ================= */
+  for (let word of customerCareKeywords) {
+    if (text.includes(word)) {
+      return addBot(`
+        📞 <b>Instaplants Customer Care</b><br><br>
+        For orders, availability, or assistance, please contact us:<br>
+        <b>Phone / WhatsApp:</b> +91 86395 33425<br>
+        <b>Support Hours:</b> 9:00 AM – 9:00 PM
+      `);
+    }
+  }
+
+  /* ================= GREETING ================= */
+  if (
+    text === "hi" ||
+    text === "hello" ||
+    text === "hey"
+  ) {
+    return addBot(`
+      🌿 <b>Welcome to Instaplants!</b><br><br>
+      I can assist you with:<br>
+      • Plant details & care tips<br>
+      • Indoor, outdoor & flowering plants<br>
+      • Customer care & enquiries<br><br>
+      Please type a plant name or <b>customer care</b>.
+    `);
+  }
+
+  /* ================= GENERAL CARE ================= */
+  if (text.includes("care")) {
+    return addBot(`
+      🌱 <b>General Plant Care Guidelines</b><br><br>
+      • Water only when the top soil feels dry<br>
+      • Ensure pots have proper drainage holes<br>
+      • Keep plants in indirect sunlight unless specified<br>
+      • Avoid overwatering and waterlogging<br>
+      • Clean leaves regularly for healthy growth
+    `);
+  }
+
+ /* 🌿 SMART PLANT NAME RECOGNITION */
+for (let key in plants) {
+  const keywords = key.split(" "); // split full name into words
+
+  for (let word of keywords) {
+    if (text.includes(word)) {
+      return showPlant(plants[key]);
+    }
+  }
+}
+
+
+  /* ================= NOT AVAILABLE ================= */
+  return addBot(`
+    ❌ <b>Plant Not Available</b><br><br>
+    The plant you are looking for is currently not listed on our platform.<br><br>
+    📞 Please contact <b>Instaplants Customer Care</b> for availability or alternative suggestions:<br>
+    <b>+91 86395 33425</b>
+  `);
+}
+
+  function addBot(html) {
+    botMessages.innerHTML += `<div class="bot-msg">${html}</div>`;
+    botMessages.scrollTop = botMessages.scrollHeight;
+  }
+
+  function showPlant(p) {
+    addBot(`
+      🌿 <b>${p.name}</b><br>
+      ℹ️ ${p.info}<br><br>
+      🪴 <b>Care Tips:</b><br>
+      • ${p.care.join("<br>• ")}
+    `);
+  }
+
+});
 /******************** MY ORDERS ********************/
 /******************** LOAD MY ORDERS (FULL DETAILS) ********************/
 async function loadMyOrders() {
@@ -924,4 +1100,5 @@ function scrollToTop() {
 /******************** INIT ********************/
 showHome();
 updateCartCount();
+
 
